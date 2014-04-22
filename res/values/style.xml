@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="replacer">Example text</string>
+    <string name="app_name">Пони-почтовик</string>
+
+    <drawable name="Mail.Bar.BG">@drawable/bar_bg_tiled</drawable>
+    <color name="Mail.Bar.Font.Color">#dedede</color>
+    <dimen name="Mail.Bar.Height">48dip</dimen>
+    <dimen name="Mail.Bar.Font.Size">16sp</dimen>
+
+
+    <color name="Mail.Label.BG">#333333</color>
+    <color name="Mail.Label.Primary.Color">#dedede</color>
+    <dimen name="Mail.Label.Primary.Size">16sp</dimen>
+    <color name="Mail.Label.Secondary.Color">#dedede</color>
+    <dimen name="Mail.Label.Secondary.Size">12sp</dimen>
+    <dimen name="Mail.Label.Count.Size">12sp</dimen>
+    <color name="Mail.Label.Count.Primary">#dedede</color>
+    <color name="Mail.Label.Count.Green">#3fa744</color>
+    <integer name="Mail.Label.Cut">2</integer>
+    <string name="Mail.Label.AndOther">, и ещё %d пони</string>
+
+    <plurals name="Mail_Label_Comments">
+        <item quantity="one">комментарий</item>
+        <item quantity="few">комментария</item>
+        <item quantity="many">комментариев</item>
+        <item quantity="two">комментария</item>
+        <item quantity="other">комментариев</item>
+        <item quantity="zero">комментариев</item>
+    </plurals>
+
+    <plurals name="Mail_Label_NewComments">
+        <item quantity="one">новый</item>
+        <item quantity="few">новых</item>
+        <item quantity="many">новых</item>
+        <item quantity="two">новых</item>
+        <item quantity="other">новых</item>
+        <item quantity="zero">новых</item>
+    </plurals>
+
+</resources>

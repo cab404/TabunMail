@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="64dp" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/Mail.Label.BG">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/replacer"
+                android:id="@+id/title"
+                android:textColor="@color/Mail.Label.Primary.Color"
+                android:textSize="@dimen/Mail.Label.Primary.Size"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/replacer"
+                android:id="@+id/about" android:textColor="@color/Mail.Label.Secondary.Color"
+                android:textSize="@dimen/Mail.Label.Secondary.Size"/>
+    </LinearLayout>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:id="@+id/comments_new"
+              android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
+              android:layout_alignParentEnd="true" android:text="+12"
+              android:textColor="@color/Mail.Label.Count.Green" android:textSize="@dimen/Mail.Label.Count.Size"
+              android:layout_marginBottom="2dp" android:layout_marginRight="2dp"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/comments"
+            android:text="12" android:textColor="@color/Mail.Label.Primary.Color"
+            android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/comments_new"
+            android:textSize="@dimen/Mail.Label.Count.Size" android:layout_marginBottom="2dp"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:id="@+id/imageView" android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/item_divider_gradient"/>
+</RelativeLayout>

@@ -1,7 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="everypony.tabunMail">
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".activities.Main"/>
+          xmlns:tools="http://schemas.android.com/tools" package="everypony.tabun.mail"
+          android:versionName="Fluffy Puff 0.0.1"
+          android:versionCode="0"
+        >
+
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="19"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
+            android:allowBackup="true"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:icon="@drawable/ic_launcher"
+            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar"
+            android:label="@string/app_name"
+            tools:ignore="NewApi"
+            android:name=".activities.MailApp">
+        <activity
+                android:name=".activities.TableActivity"
+                android:exported="true"
+                >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+        <!--Tabun.Auth-->
+        <activity android:name="everypony.tabun.auth.TabunAccountSelector"/>
+        <activity android:name="everypony.tabun.auth.TabunAuthActivity"/>
+        <activity android:name="everypony.tabun.auth.TabunTokenGetterActivity"/>
+        <service android:name="everypony.tabun.auth.TabunAuthService"
+                 android:permission="android.permission.AUTHENTICATE_ACCOUNTS">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                    android:label="@string/label"
+                    android:name="android.accounts.AccountAuthenticator"
+                    android:resource="@xml/tabun"
+                    />
+        </service>
+
     </application>
+
 </manifest>
