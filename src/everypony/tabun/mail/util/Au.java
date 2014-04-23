@@ -1,6 +1,10 @@
 package everypony.tabun.mail.util;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.util.Log;
+import android.view.View;
 import com.cab404.moonlight.framework.AccessProfile;
 
 /**
@@ -11,6 +15,25 @@ import com.cab404.moonlight.framework.AccessProfile;
 public class Au {
 
     public static AccessProfile user;
+
+    public static boolean isNetAvailable(Context context) {
+        ConnectivityManager activeNetworkInfo = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return !(activeNetworkInfo.getActiveNetworkInfo() == null || !activeNetworkInfo.getActiveNetworkInfo().isAvailable());
+    }
+
+    public static void setX(View view, int value) {
+        if (Build.VERSION.SDK_INT >= 11)
+            view.setX(value);
+        else
+            view.offsetLeftAndRight(value - view.getScrollX());
+    }
+
+    public static void setY(View view, int value) {
+        if (Build.VERSION.SDK_INT >= 11)
+            view.setY(value);
+        else
+            view.offsetTopAndBottom(value - view.getScrollY());
+    }
 
     private static String getClassName(Object obj) {
         return obj == null ? "NULL" : obj.getClass().getSimpleName();

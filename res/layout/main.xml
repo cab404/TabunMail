@@ -5,12 +5,14 @@
         android:layout_height="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android">
     <include android:layout_width="wrap_content"
              android:layout_height="@dimen/Mail.Bar.Height"
-             layout="@layout/bar" android:layout_alignParentTop="true"
-             android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
-             android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:id="@+id/bar"/>
+             layout="@layout/bar"
+             android:layout_alignParentTop="true"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentLeft="true"
+             android:id="@+id/bar"/>
     <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/root"
             android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" android:layout_alignParentRight="true"

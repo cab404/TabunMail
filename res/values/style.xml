@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="replacer">Example text</string>
+    <string name="replacer">Пример текста</string>
     <string name="app_name">Пони-почтовик</string>
 
     <drawable name="Mail.Bar.BG">@drawable/bar_bg_tiled</drawable>
     <color name="Mail.Bar.Font.Color">#dedede</color>
-    <dimen name="Mail.Bar.Height">48dip</dimen>
+    <dimen name="Mail.Bar.Height">48dp</dimen>
     <dimen name="Mail.Bar.Font.Size">16sp</dimen>
 
+    <dimen name="Mail.Body.PullToUpdate.Size">24dp</dimen>
 
     <color name="Mail.Label.BG">#333333</color>
     <color name="Mail.Label.Primary.Color">#dedede</color>
@@ -19,6 +20,9 @@
     <color name="Mail.Label.Count.Green">#3fa744</color>
     <integer name="Mail.Label.Cut">2</integer>
     <string name="Mail.Label.AndOther">, и ещё %d пони</string>
+
+    <string name="Mail.Table.Label">Список писем</string>
+    <string name="Mail.View.Label">Просмотр письма</string>
 
     <plurals name="Mail_Label_Comments">
         <item quantity="one">комментарий</item>
@@ -37,5 +41,9 @@
         <item quantity="other">новых</item>
         <item quantity="zero">новых</item>
     </plurals>
+
+
+    <string name="Mail.Notification.Comment">Новый комментарий в письме</string>
+    <string name="Mail.Notification.Letter">Вам пришло письмо</string>
 
 </resources>

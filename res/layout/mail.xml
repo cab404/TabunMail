@@ -11,12 +11,12 @@
             android:layout_alignParentLeft="true" android:layout_alignParentStart="true" android:paddingLeft="8dp"
             android:paddingRight="8dp">
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/replacer"
                 android:id="@+id/title"
                 android:textColor="@color/Mail.Label.Primary.Color"
-                android:textSize="@dimen/Mail.Label.Primary.Size"/>
+                android:textSize="@dimen/Mail.Label.Primary.Size" android:singleLine="true"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
