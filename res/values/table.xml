@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="replacer">Пример текста</string>
-    <string name="app_name">Пони-почтовик</string>
+    <string name="Mail.App.Name">Пони-почтовик</string>
 
     <drawable name="Mail.Bar.BG">@drawable/bar_bg_tiled</drawable>
     <color name="Mail.Bar.Font.Color">#dedede</color>
-    <dimen name="Mail.Bar.Height">48dp</dimen>
+    <dimen name="Mail.Bar.Height">54dp</dimen>
     <dimen name="Mail.Bar.Font.Size">16sp</dimen>
 
     <dimen name="Mail.Body.PullToUpdate.Size">24dp</dimen>
@@ -13,7 +13,7 @@
     <color name="Mail.Label.BG">#333333</color>
     <color name="Mail.Label.Primary.Color">#dedede</color>
     <dimen name="Mail.Label.Primary.Size">16sp</dimen>
-    <color name="Mail.Label.Secondary.Color">#dedede</color>
+    <color name="Mail.Label.Secondary.Color">#adadad</color>
     <dimen name="Mail.Label.Secondary.Size">12sp</dimen>
     <dimen name="Mail.Label.Count.Size">12sp</dimen>
     <color name="Mail.Label.Count.Primary">#dedede</color>

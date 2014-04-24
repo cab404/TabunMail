@@ -21,8 +21,17 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/list">
+                android:id="@+id/list" android:showDividers="beginning|middle|end"
+                android:paddingLeft="2dp" android:paddingRight="2dp">
         </LinearLayout>
 
     </ScrollView>
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_below="@+id/bar" android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true" android:indeterminate="true"
+            android:layout_marginTop="-7dp" android:max="1000" android:visibility="invisible"/>
 </RelativeLayout>
