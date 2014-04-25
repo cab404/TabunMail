@@ -16,17 +16,18 @@
             android:text="@string/Mail.App.Name"
             android:id="@+id/title" android:layout_centerVertical="true" android:layout_toRightOf="@+id/icon"
             android:textColor="@color/Mail.Bar.Font.Color" android:textSize="@dimen/Mail.Bar.Font.Size"
-            android:shadowColor="#000000" android:shadowDx="2" android:shadowDy="2" android:shadowRadius="1"
-            android:singleLine="true"/>
+            android:singleLine="true" android:layout_toLeftOf="@+id/linearLayout"/>
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_alignParentTop="true"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
 
-            android:layout_toRightOf="@+id/title" android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
-            android:orientation="horizontal" android:gravity="right" android:layout_marginRight="2dp">
+            android:orientation="horizontal" android:gravity="right" android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+            android:layout_above="@+id/view" android:layout_marginTop="4dp" android:layout_marginBottom="2dp"
+            android:id="@+id/linearLayout">
 
     </LinearLayout>
     <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_alignParentBottom="true"
           android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
-          android:background="#111111"/>
+          android:background="#111111" android:id="@+id/view"/>
 </RelativeLayout>

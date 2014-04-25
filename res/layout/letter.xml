@@ -28,15 +28,5 @@
                       android:textColor="@color/Mail.Label.Secondary.Color"
                       android:textSize="@dimen/Mail.Label.Secondary.Size"/>
         </LinearLayout>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:id="@+id/comments_new"
-                  android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
-                  android:layout_alignParentEnd="true" android:text="+12"
-                  android:textColor="@color/Mail.Label.Count.Green"
-                  android:textSize="@dimen/Mail.Label.Count.Size" android:layout_marginRight="4dp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/comments"
-                  android:text="12" android:textColor="@color/Mail.Label.Primary.Color"
-                  android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/comments_new"
-                  android:textSize="@dimen/Mail.Label.Count.Size"/>
     </RelativeLayout>
 </FrameLayout>

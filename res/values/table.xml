@@ -43,7 +43,7 @@
     </plurals>
 
 
-    <string name="Mail.Notification.Comment">Новый комментарий в письме</string>
+    <string name="Mail.Notification.Comment">Новый ответ в письме</string>
     <string name="Mail.Notification.Letter">Вам пришло письмо</string>
 
 </resources>

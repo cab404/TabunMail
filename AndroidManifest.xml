@@ -24,7 +24,7 @@
             android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar"
             android:label="@string/Mail.App.Name"
             tools:ignore="NewApi"
-            >
+            android:name=".MailApp">
 
         <!-- Список писем -->
         <activity

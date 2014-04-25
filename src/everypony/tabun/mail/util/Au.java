@@ -36,7 +36,8 @@ public class Au {
     }
 
     private static String getClassName(Object obj) {
-        return obj == null ? "NULL" : obj.getClass().getSimpleName();
+
+        return obj == null ? "NULL" : obj instanceof String ? (String) obj : obj.getClass().getSimpleName();
     }
 
     /**

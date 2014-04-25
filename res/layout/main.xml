@@ -3,14 +3,7 @@
 <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android">
-    <include android:layout_width="wrap_content"
-             android:layout_height="@dimen/Mail.Bar.Height"
-             layout="@layout/bar"
-             android:layout_alignParentTop="true"
-             android:layout_alignParentRight="true"
-             android:layout_alignParentLeft="true"
-             android:id="@+id/bar"/>
-    <ScrollView
+    <everypony.tabun.mail.util.ScrollingView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/root"
@@ -25,7 +18,7 @@
                 android:paddingLeft="2dp" android:paddingRight="2dp">
         </LinearLayout>
 
-    </ScrollView>
+    </everypony.tabun.mail.util.ScrollingView>
     <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
@@ -34,4 +27,11 @@
             android:layout_below="@+id/bar" android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true" android:indeterminate="true"
             android:layout_marginTop="-7dp" android:max="1000" android:visibility="invisible"/>
+    <include android:layout_width="wrap_content"
+             android:layout_height="@dimen/Mail.Bar.Height"
+             layout="@layout/bar"
+             android:layout_alignParentTop="true"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentLeft="true"
+             android:id="@+id/bar"/>
 </RelativeLayout>

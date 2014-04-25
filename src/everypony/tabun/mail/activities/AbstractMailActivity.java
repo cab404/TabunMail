@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.cab404.moonlight.framework.AccessProfile;
 import everypony.tabun.mail.R;
 import everypony.tabun.mail.tasks.TalkBellService;
@@ -35,6 +36,8 @@ public class AbstractMailActivity extends Activity {
                 startActivity(download);
                 finish();
             }
+        else
+            init();
 
     }
 
@@ -50,6 +53,23 @@ public class AbstractMailActivity extends Activity {
             init();
         }
 
+    }
+
+    @Override protected void onRestart() {
+        super.onRestart();
+        if (Au.user != null) {
+            startTalkBellService();
+        }
+    }
+
+    /**
+     * Запускает обновлялку писем.
+     */
+    protected void startTalkBellService() {
+        // Запускаем обновлялку писем.
+        Intent intent = new Intent(this, TalkBellService.class);
+        intent.putExtra("token", Au.user.serialize());
+        startService(intent);
     }
 
     protected void hideProgressBar() {
@@ -98,15 +118,17 @@ public class AbstractMailActivity extends Activity {
         }
     }
 
+    protected void setBarTitle(CharSequence title) {
+        ((TextView) findViewById(R.id.title)).setText(title);
+    }
 
+
+    /**
+     * Выполняется после того, как пользователь был получен или уже существует.
+     */
     protected void init() {
+        Au.v(this, "init()");
         setContentView(R.layout.main);
-
-        // Запускаем обновлялку писем.
-        Intent intent = new Intent(this, TalkBellService.class);
-        intent.putExtra("token", Au.user.serialize());
-        startService(intent);
-
     }
 
     protected LinearLayout getList() {

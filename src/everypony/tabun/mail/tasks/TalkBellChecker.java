@@ -20,15 +20,15 @@ import everypony.tabun.mail.util.Au;
  * @author cab404
  */
 public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
+    private final Context context;
     private AccessProfile user;
 
-    private final static int UPDATE_RATE = 10000;
+    private final static int UPDATE_RATE = 15000;
 
-    private Context context;
 
     public TalkBellChecker(Context context, String token) {
-        user = AccessProfile.parseString(token);
         this.context = context.getApplicationContext();
+        user = AccessProfile.parseString(token);
     }
 
     @Override protected Void doInBackground(Void... voids) {
@@ -40,12 +40,11 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
         long last_launched = 0;
 
         while (!isCancelled()) {
-
-            if (System.currentTimeMillis() - last_launched > 10000)
+            if (System.currentTimeMillis() - last_launched > UPDATE_RATE)
                 last_launched = System.currentTimeMillis();
             else continue;
 
-            if (Au.isNetAvailable(context) && user != null) {
+            if (Au.isNetAvailable(context)) {
                 TalkBellRequest bell = new TalkBellRequest();
 
                 try {
@@ -57,7 +56,9 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
 
                     if (page.c_inf == null) {
                         Au.v(this, "Токен сломан, отключаюсь.");
-                        cancel(false);
+                        break;
+                    } else {
+                        Au.v(this, "Странная ошибка.");
                     }
 
                 }
@@ -88,14 +89,13 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
                         0
                 );
 
-
         builder.setSmallIcon(R.drawable.ic_mail);
         builder.setContentText(letter.title);
         builder.setContentIntent(link);
         builder.setLights(Color.WHITE, 1000, 1000);
         builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-        builder.setVibrate(new long[]{300});
-
+        builder.setVibrate(new long[]{300, 300});
+        builder.setAutoCancel(true);
 
         return builder;
     }
@@ -126,7 +126,6 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
 
             builder.setContentTitle(context.getResources().getString(R.string.Mail_Notification_Letter));
             builder.setTicker(context.getResources().getString(R.string.Mail_Notification_Letter));
-            builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
             manager.notify(
                     letter.id,
