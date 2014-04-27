@@ -1,5 +1,6 @@
 package everypony.tabun.mail.util;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
@@ -15,6 +16,13 @@ import java.util.Calendar;
  * @author cab404
  */
 public class PartUtils {
+
+    public static class AnLisImpl implements Animator.AnimatorListener {
+        @Override public void onAnimationStart(Animator animator) {}
+        @Override public void onAnimationEnd(Animator animator) {}
+        @Override public void onAnimationCancel(Animator animator) {}
+        @Override public void onAnimationRepeat(Animator animator) {}
+    }
 
     public static String buildRecipients(Context context, Letter letter) {
         int cut = context.getResources().getInteger(R.integer.Mail_Label_Cut);
@@ -86,7 +94,6 @@ public class PartUtils {
             new_comments.setText("");
 
     }
-
 
 
 }

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.cab404.libtabun.data.Letter;
 import com.cab404.libtabun.data.LetterLabel;
@@ -12,6 +13,9 @@ import com.cab404.libtabun.pages.LetterTablePage;
 import everypony.tabun.mail.R;
 import everypony.tabun.mail.util.Au;
 import everypony.tabun.mail.util.PartUtils;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @author cab404
@@ -22,14 +26,19 @@ public class TableActivity extends AbstractMailActivity {
      * Загружаем список писем.
      */
 
+    int loaded_page_num = 1;
+    HashMap<Integer, Integer> id_to_index;
+    HashSet<Integer> selected;
+
+    {
+        id_to_index = new HashMap<>();
+        selected = new HashSet<>();
+    }
+
     protected void init() {
         super.init();
-
-        setContentView(R.layout.main);
-        showProgressBar();
-        setProgress(-1);
-
-        new InitTask().execute();
+        new InitTask(loaded_page_num++).execute();
+        initBar();
     }
 
     @Override protected void onDestroy() {
@@ -45,11 +54,48 @@ public class TableActivity extends AbstractMailActivity {
         startActivity(down);
     }
 
+    protected void onSelectionMode(Letter letter) {
+
+    }
+
+    protected void initBar() {
+        LinearLayout bar = getBar();
+        for (int i = 0; i < 5; i++) {
+            ImageView icon = new ImageView(bar.getContext());
+            icon.setImageResource(R.drawable.ic_action_mail_add);
+            bar.addView(icon);
+        }
+    }
+
+    protected void switchSelectionModeOff() {
+        LinearLayout list = getList();
+        selected.clear();
+
+        for (int i = 0; i < list.getChildCount(); i++) {
+            list
+                    .getChildAt(i)
+                    .findViewById(R.id.letter_label_root)
+                    .setBackgroundResource(R.color.Mail_Label_BG);
+        }
+    }
+
     protected class InitTask extends AsyncTask<Void, LetterLabel, Void> {
-        LetterTablePage page;
+        private int page_num;
+
+        public InitTask(int page) {
+            page_num = page;
+        }
+
+        @Override protected void onPreExecute() {
+            setProgress(-1f);
+            showProgressBar();
+            switchOverScrollHandling(false);
+        }
 
         @Override protected Void doInBackground(Void... voids) {
-            page = new LetterTablePage(1) {
+
+            LetterTablePage page;
+            page = new LetterTablePage(page_num) {
                 @Override public void handle(Object object, int key) {
                     super.handle(object, key);
 
@@ -60,7 +106,9 @@ public class TableActivity extends AbstractMailActivity {
                     }
 
                 }
+
             };
+
             page.fetch(Au.user);
             if (page.c_inf == null)
                 requestToken();
@@ -71,25 +119,26 @@ public class TableActivity extends AbstractMailActivity {
         @Override protected void onProgressUpdate(LetterLabel... values) {
             super.onProgressUpdate(values);
 
+
             LinearLayout list = getList();
             LayoutInflater inflater = getLayoutInflater();
+            setProgress((float) progress++ / 100f);
+            final LetterLabel letter = values[0];
+            id_to_index.put(letter.id, list.getChildCount());
 
-            for (final LetterLabel letter : values) {
-                setProgress((float) progress++ / 100f);
 
-                // Создаём заголовок.
-                View label = inflater.inflate(R.layout.letter_label, list, false);
+            // Создаём заголовок.
+            View label = inflater.inflate(R.layout.letter_label, list, false);
 
-                PartUtils.dumpIntoLetterLabel(label, letter);
+            PartUtils.dumpIntoLetterLabel(label, letter);
 
-                label.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
-                        onLetterSelected(letter);
-                    }
-                });
+            label.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    onLetterSelected(letter);
+                }
+            });
 
-                list.addView(label);
-            }
+            list.addView(label);
 
         }
 
@@ -97,14 +146,26 @@ public class TableActivity extends AbstractMailActivity {
             super.onPostExecute(aVoid);
             setProgress(1f);
             hideProgressBar();
+
             switchOverScrollHandling(true);
+            setBottomOverscrool(true);
+            setTopOverscrool(true);
+
             getList().forceLayout();
             updateFiller();
-
-            if (page.c_inf == null)
-                requestToken();
+            updateHeights();
 
         }
+    }
+
+    @Override protected void onOverscrollTriggered(boolean top) {
+        if (top) {
+            getList().removeAllViews();
+            loaded_page_num = 1;
+            updateFiller();
+            updateHeights();
+        }
+        new InitTask(loaded_page_num++).execute();
     }
 
 }

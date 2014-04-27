@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,21 +16,17 @@ import com.cab404.moonlight.framework.AccessProfile;
 import everypony.tabun.mail.R;
 import everypony.tabun.mail.tasks.TalkBellService;
 import everypony.tabun.mail.util.Au;
+import everypony.tabun.mail.util.PartUtils;
 import everypony.tabun.mail.views.ScrollingView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author cab404
  */
 public class AbstractMailActivity extends Activity {
     private static final int TOKEN_REQUEST_CODE = 42;
-    // Отвечает за включение/выключения overscroll-а.
-    private boolean top_overscroll_working = true;
-    private boolean bottom_overscroll_working = true;
-    // Не слушаем обновления до тех пор, пока animate в hide не закончит скрывать бар.
-    private boolean top_overscroll_switching = false;
-    private boolean bottom_overscroll_switching = false;
 
     protected LinearLayout getList() {
         return (LinearLayout) findViewById(R.id.list);
@@ -43,8 +38,12 @@ public class AbstractMailActivity extends Activity {
         else
             init();
 
-        max_counter = getResources().getDisplayMetrics().density * 50f;
+        max_counter = getResources().getDisplayMetrics().density * 100f;
 
+    }
+
+    public LinearLayout getBar() {
+        return (LinearLayout) findViewById(R.id.bar_contents);
     }
 
     public void requestToken() {
@@ -92,44 +91,19 @@ public class AbstractMailActivity extends Activity {
         startService(intent);
     }
 
-    protected void hideProgressBar() {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.animate().alpha(0).setListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animator) {
-
-            }
-            @Override public void onAnimationEnd(Animator animator) {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-            @Override public void onAnimationCancel(Animator animator) {
-
-            }
-            @Override public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-    }
 
     /**
-     * Fade-in-ает progressBar в шапке.
+     * Выполняется после того, как пользователь был получен или уже существует.
      */
-    protected void showProgressBar() {
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.animate().alpha(1).setListener(new Animator.AnimatorListener() {
-            @Override public void onAnimationStart(Animator animator) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-            @Override public void onAnimationEnd(Animator animator) {
-
-            }
-            @Override public void onAnimationCancel(Animator animator) {
-
-            }
-            @Override public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
+    protected void init() {
+        Au.v(this, "init()");
+        setContentView(R.layout.main);
     }
+
+      /*========================*/
+     /* Код, отвечающий за бар */
+    /*========================*/
+
 
     /**
      * Управляет значением progressBar-а в шапке. Значение от 0 до 1.
@@ -149,62 +123,67 @@ public class AbstractMailActivity extends Activity {
         ((TextView) findViewById(R.id.title)).setText(title);
     }
 
-
-    /**
-     * Выполняется после того, как пользователь был получен или уже существует.
-     */
-    protected void init() {
-        Au.v(this, "init()");
-        setContentView(R.layout.main);
+    protected void hideProgressBar() {
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.animate().alpha(0).setListener(new PartUtils.AnLisImpl() {
+            @Override public void onAnimationEnd(Animator animator) {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     /**
-     * Включает и выключает обработку событий overscroll-а из root.
+     * Fade-in-ает progressBar в шапке.
      */
-    protected void switchOverScrollHandling(boolean state) {
-        if (state)
-            ((ScrollingView) findViewById(R.id.root)).setHandler(new ScrollingView.ScrollHandler() {
-                @Override public void onScrolled(int y, int old_y) {
-                    AbstractMailActivity.this.onScrolled(y, old_y);
-                }
-                @Override public void onOverScrolled(float y, boolean clamped) {
-                    AbstractMailActivity.this.onOverScrolled(y, clamped);
-                }
-            });
-        else
-            ((ScrollingView) findViewById(R.id.root)).setHandler(null);
+    protected void showProgressBar() {
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.animate().alpha(1).setListener(new PartUtils.AnLisImpl() {
+            @Override public void onAnimationStart(Animator animator) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
-    @Override public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }
 
       /*===========================*/
      /* Код, отвечающий за скролл */
     /*===========================*/
 
     private int current_scroll = 0;
-    private ArrayList<Integer> heights;
-    protected void onScrolled(int y, int old_y) { current_scroll = y;}
+
+    // Кэшированные высоты.
+    private List<Integer> heights;
+    {heights = new ArrayList<>();}
+
+    protected void onScrolled(int y, int old_y) {}
     protected int getCurrentScroll() { return current_scroll;}
 
     protected void smoothScrollTo(int index) { smoothScrollToPixel(heights.get(index));}
-    protected void smoothScrollToPixel(int x) { ((ScrollView) findViewById(R.id.root)).smoothScrollTo(x, 0);}
+    protected void smoothScrollToPixel(int y) { ((ScrollView) findViewById(R.id.root)).smoothScrollTo(0, y);}
 
     protected void scrollTo(int index) { scrollToPixel(heights.get(index));}
-    protected void scrollToPixel(int x) { findViewById(R.id.root).scrollTo(x, 0);}
+    protected void scrollToPixel(int y) { findViewById(R.id.root).scrollTo(0, y);}
 
     protected void updateHeights() {
         LinearLayout list = getList();
         heights.clear();
-        for (int i = 0; i < list.getChildCount(); i++)
-            heights.add(list.getChildAt(i).getHeight());
+        int h = 0;
+        for (int i = 0; i < list.getChildCount(); i++) {
+            heights.add(h);
+            h += list.getChildAt(i).getHeight();
+        }
     }
 
       /*==============================================================================================*/
      /* Дальше идёт код, контролирующий overscroll. Копытами и руками не трогать и громко не чихать. */
     /*==============================================================================================*/
 
+    // Отвечает за включение/выключения overscroll-а.
+    private boolean top_overscroll_working = false;
+    private boolean bottom_overscroll_working = false;
+    // Не слушаем обновления до тех пор, пока animate в hide не закончит скрывать бар.
+    private boolean top_overscroll_switching = false;
+    private boolean bottom_overscroll_switching = false;
     // Контролирует необходимую прокрутку в стену для обновления.
     // Вычисляется в создании в соответствии с DPI.
     private float max_counter;
@@ -218,37 +197,34 @@ public class AbstractMailActivity extends Activity {
         updateFiller();
         if (clamped) {
 
-            edge_counter += y;
+            if (y > 0 && top_overscroll_working && !top_overscroll_switching) {
+                edge_counter = edge_counter < 0 ? 0 : edge_counter;
+                edge_counter += y;
+                setTopOverscrollBar((float) Math.sqrt(Math.abs(edge_counter) / max_counter));
+            }
 
-            if (y > 0 && top_overscroll_working)
-                setTopOverscrollBar(Math.abs(edge_counter) / max_counter);
-
-            if (y < 0 && bottom_overscroll_working)
-                setBottomOverscrollBar(Math.abs(edge_counter) / max_counter);
+            if (y < 0 && bottom_overscroll_working && !top_overscroll_switching) {
+                edge_counter = edge_counter > 0 ? 0 : edge_counter;
+                edge_counter += y;
+                setBottomOverscrollBar((float) Math.sqrt(Math.abs(edge_counter) / max_counter));
+            }
 
         } else {
-
             // -100 указано в ScrollingView, magic number в данном случае. Активируется при ACTION_UP (отпустили экран).
+            // А нам это и нужно. Если edge counter достиг нужной отметки к этому времени, то можно отправлять эвент в
+            // onOverscrollTriggered.
             if (y == -100) {
-                if (edge_counter >= +max_counter) {
+
+                if (edge_counter >= +max_counter)
                     onOverscrollTriggered(true);
-                    edge_counter = 0;
-                    hideTopOverscrollBar();
-                }
 
-                if (edge_counter <= -max_counter) {
+                if (edge_counter <= -max_counter)
                     onOverscrollTriggered(false);
-                    edge_counter = 0;
-                    hideBottomOverscrollBar();
-                }
-
             }
-            edge_counter = 0;
 
             hideTopOverscrollBar();
-
             hideBottomOverscrollBar();
-
+            edge_counter = 0;
         }
 
     }
@@ -263,7 +239,7 @@ public class AbstractMailActivity extends Activity {
      * Вызывать при обновлениях контента в list и обновлении размеров экрана (при повороте).
      */
     protected void updateFiller() {
-        int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 2; // Оставляем 2 пикселя для скролла.
+        int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 5; // Оставляем пиксели для скролла.
 
         if (delta > 0) {
             findViewById(R.id.root_filler).setLayoutParams(
@@ -282,6 +258,24 @@ public class AbstractMailActivity extends Activity {
             );
             findViewById(R.id.root).setVerticalScrollBarEnabled(true);
         }
+    }
+
+    /**
+     * С помощью этой штуки можно полностью отключить весь хэндлинг и обработку scroll-а и overscroll-а.
+     */
+    protected void switchOverScrollHandling(boolean state) {
+        if (state)
+            ((ScrollingView) findViewById(R.id.root)).setHandler(new ScrollingView.ScrollHandler() {
+                @Override public void onScrolled(int y, int old_y) {
+                    AbstractMailActivity.this.onScrolled(y, old_y);
+                    current_scroll = y;
+                }
+                @Override public void onOverScrolled(float y, boolean clamped) {
+                    AbstractMailActivity.this.onOverScrolled(y, clamped);
+                }
+            });
+        else
+            ((ScrollingView) findViewById(R.id.root)).setHandler(null);
     }
 
     /**
@@ -306,19 +300,14 @@ public class AbstractMailActivity extends Activity {
      * Скрывает overscroll-бар в шапке.
      */
     private void hideTopOverscrollBar() {
+        edge_counter = 0;
         if (!top_overscroll_switching) {
             findViewById(R.id.top_overscroll_indicator)
                     .animate()
                     .scaleX(0)
-                    .setListener(new Animator.AnimatorListener() {
-                        @Override public void onAnimationStart(Animator animator) {
-                            top_overscroll_switching = true;
-                        }
-                        @Override public void onAnimationEnd(Animator animator) {
-                            top_overscroll_switching = false;
-                        }
-                        @Override public void onAnimationCancel(Animator animator) {}
-                        @Override public void onAnimationRepeat(Animator animator) {}
+                    .setListener(new PartUtils.AnLisImpl() {
+                        @Override public void onAnimationStart(Animator animator) { top_overscroll_switching = true;}
+                        @Override public void onAnimationEnd(Animator animator) { top_overscroll_switching = false; }
                     });
         }
     }
@@ -326,19 +315,16 @@ public class AbstractMailActivity extends Activity {
      * Скрывает бар на дне.
      */
     private void hideBottomOverscrollBar() {
+        edge_counter = 0;
         if (!bottom_overscroll_switching) {
             findViewById(R.id.bottom_overscroll_indicator)
                     .animate()
                     .scaleX(0)
-                    .setListener(new Animator.AnimatorListener() {
-                        @Override public void onAnimationStart(Animator animator) {
-                            bottom_overscroll_switching = true;
-                        }
+                    .setListener(new PartUtils.AnLisImpl() {
+                        @Override public void onAnimationStart(Animator animator) { bottom_overscroll_switching = true;}
                         @Override public void onAnimationEnd(Animator animator) {
                             bottom_overscroll_switching = false;
                         }
-                        @Override public void onAnimationCancel(Animator animator) {}
-                        @Override public void onAnimationRepeat(Animator animator) {}
                     });
         }
     }

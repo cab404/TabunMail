@@ -106,6 +106,7 @@ public class TalkActivity extends AbstractMailActivity {
         int num = 0, loaded = 0;
         @Override protected void onProgressUpdate(Object... values) {
             super.onProgressUpdate(values);
+
             int key = (int) values[0];
             Object obj = values[1];
 
@@ -114,24 +115,12 @@ public class TalkActivity extends AbstractMailActivity {
             switch (key) {
                 case TabunPage.BLOCK_LETTER_HEADER: {
                     Letter letter = (Letter) obj;
+
                     View label = inflater.inflate(R.layout.letter_label, getList(), false);
-//                    label.setAlpha(0);
-//                    label.animate().alpha(1).setDuration(100);
 
                     setBarTitle(letter.title);
 
                     PartUtils.dumpIntoLetterLabel(label, letter);
-
-//                    ViewGroup viewGroup = (ViewGroup) label.findViewById(R.id.content);
-//                    TextView view = new TextView(TalkActivity.this);
-//                    view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.Mail_Label_Primary_Size));
-//                    view.setTextColor(getResources().getColor(R.color.Mail_Label_Primary_Color));
-//                    view.setText(letter.text);
-//                    viewGroup.addView(view);
-
-
-//                    ((TextView) label.findViewById(R.id.starter_nick)).setText(letter.starter.login);
-//                    ((TextView) label.findViewById(R.id.recipients)).setText(SU.join(letter.recipients, ", "));
 
                     getList().addView(label);
 
@@ -160,6 +149,18 @@ public class TalkActivity extends AbstractMailActivity {
                 requestToken();
             hideProgressBar();
             switchOverScrollHandling(true);
+
+            getList().forceLayout();
+
+            updateHeights();
+            updateFiller();
+
         }
     }
+
+    @Override protected void onOverscrollTriggered(boolean top) {
+        Au.v(this, "Triggered.");
+        smoothScrollTo(3);
+    }
+
 }
