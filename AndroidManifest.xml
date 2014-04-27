@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools" package="everypony.tabun.mail"
-          android:versionName="Fluffy Puff 0.0.1"
-          android:versionCode="0"
+          android:versionName="0.1.0(DerpyWhooves)"
+          android:versionCode="1"
         >
 
     <uses-sdk android:minSdkVersion="12" android:targetSdkVersion="19"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="everypony.tabun.REQUEST_AUTH_TOKEN"/>
 
     <application
             android:allowBackup="true"

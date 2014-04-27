@@ -55,10 +55,10 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
                     page.fetch(user);
 
                     if (page.c_inf == null) {
-                        Au.v(this, "Токен сломан, отключаюсь.");
+                        Au.w(this, "Токен сломан, отключаюсь.");
                         break;
                     } else {
-                        Au.v(this, "Странная ошибка.");
+                        Au.w(this, "Странная ошибка, токен работает но bell.exec() возвратил ошибку.", e);
                     }
 
                 }
@@ -67,7 +67,7 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
                     publishProgress(bell);
 
             } else {
-                Au.v(this, "problems...");
+                Au.w(this, "У нас проблемы с сетью...");
             }
 
         }

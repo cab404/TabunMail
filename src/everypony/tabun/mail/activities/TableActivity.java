@@ -12,7 +12,6 @@ import com.cab404.libtabun.pages.LetterTablePage;
 import everypony.tabun.mail.R;
 import everypony.tabun.mail.util.Au;
 import everypony.tabun.mail.util.PartUtils;
-import everypony.tabun.mail.util.SpyView;
 
 /**
  * @author cab404
@@ -37,7 +36,6 @@ public class TableActivity extends AbstractMailActivity {
         super.onDestroy();
     }
 
-
     //TODO: Добавить выделение/удаление/прочтение писем.
     protected void onLetterSelected(Letter letter) {
         Intent down = new Intent(
@@ -54,6 +52,7 @@ public class TableActivity extends AbstractMailActivity {
             page = new LetterTablePage(1) {
                 @Override public void handle(Object object, int key) {
                     super.handle(object, key);
+
                     switch (key) {
                         case BLOCK_LETTER_LABEL:
                             publishProgress((LetterLabel) object);
@@ -63,6 +62,8 @@ public class TableActivity extends AbstractMailActivity {
                 }
             };
             page.fetch(Au.user);
+            if (page.c_inf == null)
+                requestToken();
             return null;
         }
 
@@ -90,15 +91,19 @@ public class TableActivity extends AbstractMailActivity {
                 list.addView(label);
             }
 
-
         }
 
         @Override protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             setProgress(1f);
             hideProgressBar();
+            switchOverScrollHandling(true);
+            getList().forceLayout();
+            updateFiller();
 
-            getList().addView(new SpyView(TableActivity.this));
+            if (page.c_inf == null)
+                requestToken();
+
         }
     }
 

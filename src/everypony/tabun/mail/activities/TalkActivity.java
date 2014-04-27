@@ -47,20 +47,46 @@ public class TalkActivity extends AbstractMailActivity {
 
 
     HashMap<Integer, Integer> levels;
+    {levels = new HashMap<>();}
 
     protected void addComment(Comment comment) {
         int level = 0;
-        if (comment.parent != 0) {
+        if (comment.parent != 0)
             level = levels.get(comment.parent) + 1;
-        }
         levels.put(comment.id, level);
+
+        View label = getLayoutInflater().inflate(R.layout.comment, getList(), false);
+//                    label.setAlpha(0);
+//                    label.animate().alpha(1).setDuration(100);
+
+        label.findViewById(R.id.new_mark).setVisibility(comment.is_new ? View.VISIBLE : View.INVISIBLE);
+
+        ViewGroup viewGroup = (ViewGroup) label.findViewById(R.id.content);
+        TextView view = new TextView(TalkActivity.this);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.Mail_Label_Primary_Size));
+        view.setTextColor(getResources().getColor(R.color.Mail_Label_Primary_Color));
+        view.setText(comment.text);
+        viewGroup.addView(view);
+
+        ((TextView) label.findViewById(R.id.starter_nick)).setText(comment.author.login);
+        ((TextView) label.findViewById(R.id.recipients)).setText(PartUtils.convertDate(comment.date));
+
+        label.setPadding(
+                label.getPaddingRight() + label.getPaddingRight() * level * 5,
+                label.getPaddingTop(),
+                label.getPaddingRight(),
+                label.getPaddingLeft()
+        );
+
+        getList().addView(label);
 
     }
 
     private class InitTask extends AsyncTask<Void, Object, Void> {
+        LetterPage page;
 
         @Override protected Void doInBackground(Void... voids) {
-            new LetterPage(letter_id) {
+            page = new LetterPage(letter_id) {
 
                 @Override protected void bindParsers(ModularBlockParser base) {
                     super.bindParsers(base);
@@ -72,7 +98,8 @@ public class TalkActivity extends AbstractMailActivity {
                     publishProgress(key, object);
 
                 }
-            }.fetch(Au.user);
+            };
+            page.fetch(Au.user);
             return null;
         }
 
@@ -114,23 +141,8 @@ public class TalkActivity extends AbstractMailActivity {
                 case TabunPage.BLOCK_COMMENT: {
                     Comment comment = (Comment) obj;
 
-                    View label = inflater.inflate(R.layout.comment, getList(), false);
-//                    label.setAlpha(0);
-//                    label.animate().alpha(1).setDuration(100);
+                    addComment(comment);
 
-                    label.findViewById(R.id.new_mark).setVisibility(comment.is_new ? View.VISIBLE : View.INVISIBLE);
-
-                    ViewGroup viewGroup = (ViewGroup) label.findViewById(R.id.content);
-                    TextView view = new TextView(TalkActivity.this);
-                    view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.Mail_Label_Primary_Size));
-                    view.setTextColor(getResources().getColor(R.color.Mail_Label_Primary_Color));
-                    view.setText(comment.text);
-                    viewGroup.addView(view);
-
-                    ((TextView) label.findViewById(R.id.starter_nick)).setText(comment.author.login);
-                    ((TextView) label.findViewById(R.id.recipients)).setText(PartUtils.convertDate(comment.date));
-
-                    getList().addView(label);
                     loaded++;
                     setProgress(loaded / (float) num);
                 }
@@ -144,7 +156,10 @@ public class TalkActivity extends AbstractMailActivity {
 
         @Override protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (page.c_inf == null)
+                requestToken();
             hideProgressBar();
+            switchOverScrollHandling(true);
         }
     }
 }
