@@ -40,45 +40,37 @@ public class Au {
     }
 
     /**
-     * Труба к Log.v
+     * Труба к Log.i
      * Записывает данные в лог, используя простое имя объекта, как тег.
      */
-    public static void v(Object object, String text) {
-        Log.v(getClassName(object), text);
+    public static void i(Object object, String text) {
+        Log.i(getClassName(object), text);
     }
 
     /**
-     * Труба к Log.v
+     * Труба к Log.i
      * Записывает данные в лог, используя простое имя объекта, как тег.
      */
-    public static void v(Object object, String text, Throwable t) {
-        Log.v(getClassName(object), text, t);
-    }
-
-
-    /**
-     * Труба к Log.w
-     * Записывает данные в лог, используя простое имя объекта, как тег.
-     */
-    public static void w(Object object, String text) {
-        Log.w(getClassName(object), text);
-    }
-
-    /**
-     * Труба к Log.w
-     * Записывает данные в лог, используя простое имя объекта, как тег.
-     */
-    public static void w(Object object, String text, Throwable t) {
-        Log.w(getClassName(object), text, t);
+    public static void i(Object object, String text, Throwable t) {
+        Log.i(getClassName(object), text, t);
     }
 
 
     /**
-     * Труба к Log.w
+     * Труба к Log.e
      * Записывает данные в лог, используя простое имя объекта, как тег.
      */
-    public static void w(Object object, Throwable t) {
-        Log.w(getClassName(object), t);
+    public static void e(Object object, String text) {
+        Log.e(getClassName(object), text);
     }
+
+    /**
+     * Труба к Log.e
+     * Записывает данные в лог, используя простое имя объекта, как тег.
+     */
+    public static void e(Object object, String text, Throwable t) {
+        Log.e(getClassName(object), text, t);
+    }
+
 
 }

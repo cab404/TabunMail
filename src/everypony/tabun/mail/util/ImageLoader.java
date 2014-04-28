@@ -115,7 +115,7 @@ public class ImageLoader {
                     bitmap = BitmapFactory.decodeStream(content, null, opt);
 
                 } catch (IOException e) {
-                    Au.w(this, e);
+                    Au.e(this, "Ошибка при загрузке картинки.", e);
                 } catch (OutOfMemoryError e) {
                     retry_count = 0;
                 }

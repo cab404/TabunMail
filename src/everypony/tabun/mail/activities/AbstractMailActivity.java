@@ -96,7 +96,7 @@ public class AbstractMailActivity extends Activity {
      * Выполняется после того, как пользователь был получен или уже существует.
      */
     protected void init() {
-        Au.v(this, "init()");
+        Au.i(this, "init()");
         setContentView(R.layout.main);
     }
 
@@ -174,9 +174,9 @@ public class AbstractMailActivity extends Activity {
         }
     }
 
-      /*==============================================================================================*/
-     /* Дальше идёт код, контролирующий overscroll. Копытами и руками не трогать и громко не чихать. */
-    /*==============================================================================================*/
+      /*=============================================================================================*/
+     /* Дальше идёт код, контролирующий overscroll. Копытами и руками не трогать, громко не чихать. */
+    /*=============================================================================================*/
 
     // Отвечает за включение/выключения overscroll-а.
     private boolean top_overscroll_working = false;
@@ -230,7 +230,7 @@ public class AbstractMailActivity extends Activity {
     }
 
     protected void onOverscrollTriggered(boolean top) {
-        Au.v(this, "Overscroll triggered " + (top ? "top" : "bottom"));
+        Au.i(this, "Overscroll triggered " + (top ? "top" : "bottom"));
     }
 
     /**
@@ -239,7 +239,7 @@ public class AbstractMailActivity extends Activity {
      * Вызывать при обновлениях контента в list и обновлении размеров экрана (при повороте).
      */
     protected void updateFiller() {
-        int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 5; // Оставляем пиксели для скролла.
+        int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 10; // Оставляем пиксели для скролла.
 
         if (delta > 0) {
             findViewById(R.id.root_filler).setLayoutParams(
@@ -300,7 +300,6 @@ public class AbstractMailActivity extends Activity {
      * Скрывает overscroll-бар в шапке.
      */
     private void hideTopOverscrollBar() {
-        edge_counter = 0;
         if (!top_overscroll_switching) {
             findViewById(R.id.top_overscroll_indicator)
                     .animate()
@@ -315,7 +314,6 @@ public class AbstractMailActivity extends Activity {
      * Скрывает бар на дне.
      */
     private void hideBottomOverscrollBar() {
-        edge_counter = 0;
         if (!bottom_overscroll_switching) {
             findViewById(R.id.bottom_overscroll_indicator)
                     .animate()

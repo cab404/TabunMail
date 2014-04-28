@@ -8,9 +8,8 @@
     <dimen name="Mail.Bar.Height">54dp</dimen>
     <dimen name="Mail.Bar.Font.Size">16sp</dimen>
 
-    <dimen name="Mail.Body.PullToUpdate.Size">24dp</dimen>
-
     <color name="Mail.Label.BG">#333333</color>
+    <color name="Mail.Label.Selected.BG">#333355</color>
     <color name="Mail.Label.Primary.Color">#dedede</color>
     <dimen name="Mail.Label.Primary.Size">16sp</dimen>
     <color name="Mail.Label.Secondary.Color">#adadad</color>

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.cab404.libtabun.data.Comment;
-import com.cab404.libtabun.data.Letter;
 import com.cab404.libtabun.modules.CommentNumModule;
 import com.cab404.libtabun.pages.LetterPage;
 import com.cab404.libtabun.pages.TabunPage;
@@ -37,7 +36,7 @@ public class TalkActivity extends AbstractMailActivity {
         assert data != null;
         List<String> path = data.getPathSegments();
         letter_id = Integer.parseInt(path.get(path.size() - 1));
-        Au.v(this, "Открываю письмо " + letter_id);
+        Au.i(this, "Открываю письмо " + letter_id);
 
         // Запускаем загрузку.
 
@@ -113,19 +112,19 @@ public class TalkActivity extends AbstractMailActivity {
             LayoutInflater inflater = getLayoutInflater();
 
             switch (key) {
-                case TabunPage.BLOCK_LETTER_HEADER: {
-                    Letter letter = (Letter) obj;
-
-                    View label = inflater.inflate(R.layout.letter_label, getList(), false);
-
-                    setBarTitle(letter.title);
-
-                    PartUtils.dumpIntoLetterLabel(label, letter);
-
-                    getList().addView(label);
-
-                }
-                break;
+//                case TabunPage.BLOCK_LETTER_HEADER: {
+//                    Letter letter = (Letter) obj;
+//
+//                    View label = inflater.inflate(R.layout.letter_label, getList(), false);
+//
+//                    setBarTitle(letter.title);
+//
+//                    PartUtils.dumpIntoLetterLabel(label, letter);
+//
+//                    getList().addView(label);
+//
+//                }
+//                break;
 
                 case TabunPage.BLOCK_COMMENT: {
                     Comment comment = (Comment) obj;
@@ -159,7 +158,7 @@ public class TalkActivity extends AbstractMailActivity {
     }
 
     @Override protected void onOverscrollTriggered(boolean top) {
-        Au.v(this, "Triggered.");
+        Au.i(this, "Triggered.");
         smoothScrollTo(3);
     }
 

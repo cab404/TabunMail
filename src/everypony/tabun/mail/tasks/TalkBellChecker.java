@@ -13,6 +13,7 @@ import com.cab404.libtabun.data.Letter;
 import com.cab404.libtabun.pages.TabunPage;
 import com.cab404.libtabun.requests.TalkBellRequest;
 import com.cab404.moonlight.framework.AccessProfile;
+import com.cab404.moonlight.util.exceptions.RequestFail;
 import everypony.tabun.mail.R;
 import everypony.tabun.mail.util.Au;
 
@@ -32,14 +33,14 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
     }
 
     @Override protected Void doInBackground(Void... voids) {
-        Au.v(this, "doInBackground()");
+        Au.i(this, "doInBackground()");
 
         TabunPage page = new TabunPage();
-        page.fetch(user);
-
         long last_launched = 0;
 
         while (!isCancelled()) {
+            if (page.key == null) page.fetch(user);
+
             if (System.currentTimeMillis() - last_launched > UPDATE_RATE)
                 last_launched = System.currentTimeMillis();
             else continue;
@@ -49,16 +50,27 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
 
                 try {
                     bell.exec(user, page);
+                } catch (RequestFail rf) {
+
+                    Au.e(this, "Проблемы с сетью.", rf);
+                    continue;
+
                 } catch (Exception e) {
 
                     page = new TabunPage();
-                    page.fetch(user);
+
+                    try {
+                        page.fetch(user);
+                    } catch (RequestFail rf) {
+                        Au.e(this, "Проблемы с сетью.", rf);
+                        continue;
+                    }
 
                     if (page.c_inf == null) {
-                        Au.w(this, "Токен сломан, отключаюсь.");
+                        Au.e(this, "Токен сломан, отключаюсь.");
                         break;
                     } else {
-                        Au.w(this, "Странная ошибка, токен работает но bell.exec() возвратил ошибку.", e);
+                        Au.e(this, "Странная ошибка, токен работает но bell.exec() возвратил ошибку.", e);
                     }
 
                 }
@@ -67,11 +79,11 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
                     publishProgress(bell);
 
             } else {
-                Au.w(this, "У нас проблемы с сетью...");
+                Au.e(this, "У нас проблемы с сетью...");
             }
 
         }
-        Au.v(this, "Меня выключили.");
+        Au.i(this, "Меня выключили.");
         return null;
     }
 
@@ -106,7 +118,7 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         for (Letter letter : req.responses) {
-            Au.v(this, "Я получила письмо о том, что у тебя ответ на комментарий!");
+            Au.i(this, "Я получила письмо о том, что у тебя ответ на комментарий!");
             Notification.Builder builder = notificationTemplate(letter);
 
             builder.setContentTitle(context.getResources().getString(R.string.Mail_Notification_Comment));
@@ -121,7 +133,7 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
 
 
         for (Letter letter : req.new_letters) {
-            Au.v(this, "Я получила письмо о том, что у тебя новое письмо!");
+            Au.i(this, "Я получила письмо о том, что у тебя новое письмо!");
             Notification.Builder builder = notificationTemplate(letter);
 
             builder.setContentTitle(context.getResources().getString(R.string.Mail_Notification_Letter));

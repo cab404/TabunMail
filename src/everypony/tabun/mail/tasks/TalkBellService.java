@@ -15,12 +15,12 @@ public class TalkBellService extends Service {
     public static final String TOKEN = "token";
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
-        Au.v(this, "onStart()");
+        Au.i(this, "onStart()");
 
         if (intent == null) {
-            Au.v(this, "Не могу запустить обновления с сервера, передан пустой intent.");
+            Au.i(this, "Не могу запустить обновления с сервера, передан пустой intent.");
             if (checker != null && !(checker.getStatus() == AsyncTask.Status.FINISHED || checker.isCancelled()))
-                Au.v(this, "Тем не менее, по всей видимости он всё ещё работает.");
+                Au.i(this, "Тем не менее, по всей видимости он всё ещё работает.");
         }
 
         if (checker == null || checker.getStatus() == AsyncTask.Status.FINISHED || checker.isCancelled())
@@ -31,13 +31,13 @@ public class TalkBellService extends Service {
     }
 
     @Override public void onDestroy() {
-        Au.v(this, "onDestroy()");
+        Au.i(this, "onDestroy()");
 
         checker.cancel(false);
     }
 
     @Override public IBinder onBind(Intent intent) {
-        Au.v(this, "onBind()");
+        Au.i(this, "onBind()");
 
         return null;
     }

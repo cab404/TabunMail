@@ -3,9 +3,11 @@ package everypony.tabun.mail.util;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 import com.cab404.libtabun.data.Letter;
+import com.cab404.libtabun.data.LetterLabel;
 import com.cab404.libtabun.util.Tabun;
 import com.cab404.moonlight.util.SU;
 import everypony.tabun.mail.R;
@@ -60,7 +62,7 @@ public class PartUtils {
     /**
      * Загружает данные письма в частичный
      */
-    public static void dumpIntoLetterLabel(View label, Letter letter) {
+    public static void dumpIntoLetterLabel(View label, LetterLabel letter) {
         Resources res = label.getResources();
 
         // Достаём ресурсы.
@@ -73,7 +75,11 @@ public class PartUtils {
         // Собираем заголовок.
 
         //// Текст и описание
+
         title.setText(letter.title);
+        if (letter.is_new)
+            title.setTypeface(Typeface.DEFAULT_BOLD);
+
         about.setText(PartUtils.buildRecipients(label.getContext(), letter));
 
         //// Индикаторы количества комментариев.
