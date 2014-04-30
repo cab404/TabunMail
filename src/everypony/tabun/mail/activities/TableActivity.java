@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.cab404.libtabun.data.Letter;
 import com.cab404.libtabun.data.LetterLabel;
 import com.cab404.libtabun.data.LivestreetKey;
@@ -42,9 +43,9 @@ public class TableActivity extends AbstractMailActivity {
         selected = new HashSet<>();
     }
 
-    protected void init() {
+    @Override protected void init() {
         super.init();
-        new LoadListTask(loaded_page_num++).execute();
+        new LoadListTask(loaded_page_num = 1).execute();
         initCommonBar();
     }
 
@@ -98,6 +99,7 @@ public class TableActivity extends AbstractMailActivity {
      * Кнопки работы со списками. Можно считать как onSelectionModeOn.
      */
     protected void initSelectionBar() {
+
         LinearLayout bar = getBar();
         bar.removeAllViews();
         ImageView icon;
@@ -133,8 +135,6 @@ public class TableActivity extends AbstractMailActivity {
         });
         bar.addView(icon);
 
-        switchOverScrollHandling(false);
-
     }
 
     /**
@@ -146,12 +146,17 @@ public class TableActivity extends AbstractMailActivity {
 
         ImageView icon = new ImageView(bar.getContext());
         icon.setImageResource(R.drawable.ic_action_mail_add);
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                startActivity(new Intent(TableActivity.this, MailCreationActivity.class));
+            }
+        });
         bar.addView(icon);
 
-        switchOverScrollHandling(true);
     }
 
     protected void switchSelectionModeOff() {
+
         for (int id : selected.toArray(new Integer[selected.size()])) {
             Letter stub = new Letter();
             stub.id = id;
@@ -167,7 +172,10 @@ public class TableActivity extends AbstractMailActivity {
         LetterLabel label = id_to_letter.get(id);
         label.is_new = false;
 
-        PartUtils.dumpIntoLetterLabel(getList().getChildAt(id_to_index.get(id)), label);
+        PartUtils.dumpIntoLetterLabel(
+                getList().getChildAt(id_to_index.get(id)),
+                label
+        );
     }
 
 
@@ -180,18 +188,14 @@ public class TableActivity extends AbstractMailActivity {
             if (e.getValue() > index)
                 e.setValue(e.getValue() - 1);
         getList().removeViewAt(index);
-        updateHeights();
-        updateFiller();
     }
 
     @Override protected void onOverscrollTriggered(boolean top) {
         if (top) {
             getList().removeAllViews();
-            loaded_page_num = 1;
-            updateFiller();
-            updateHeights();
+            loaded_page_num = 0;
         }
-        new LoadListTask(loaded_page_num++).execute();
+        new LoadListTask(++loaded_page_num).execute();
     }
 
     private class LoadListTask extends AsyncTask<Void, LetterLabel, Void> {
@@ -204,7 +208,6 @@ public class TableActivity extends AbstractMailActivity {
         @Override protected void onPreExecute() {
             setProgress(-1f);
             showProgressBar();
-            switchOverScrollHandling(false);
         }
 
         @Override protected Void doInBackground(Void... voids) {
@@ -273,17 +276,19 @@ public class TableActivity extends AbstractMailActivity {
             setProgress(1f);
             hideProgressBar();
 
-            switchOverScrollHandling(true);
             setBottomOverscrool(true);
             setTopOverscrool(true);
 
-            getList().forceLayout();
-            updateFiller();
-            updateHeights();
+            switchOverScrollHandling(true);
 
+            getList().forceLayout();
         }
     }
 
+
+    /**
+     * Задание работы над выбранными письмами.
+     */
     private class ExecActionsOnLetterList extends AsyncTask<Void, Void, Boolean> {
         private LetterListRequest.Action action;
         Integer[] selection;
@@ -303,17 +308,54 @@ public class TableActivity extends AbstractMailActivity {
         }
 
         @Override protected void onPostExecute(Boolean success) {
-            if (success)
-                for (int id : selection) {
-                    if (action == LetterListRequest.Action.DELETE)
-                        deleteLetter(id);
-                    if (action == LetterListRequest.Action.READ)
-                        readLetter(id);
+
+            if (success) {
+                switch (action) {
+                    case DELETE:
+
+                        for (int id : selection)
+                            deleteLetter(id);
+
+                        Toast.makeText(
+                                TableActivity.this,
+                                getResources()
+                                        .getQuantityString(R.plurals.Mail_Actions_Delete, selection.length)
+                                        .replace("$n", selection.length + ""),
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                        break;
+
+                    case READ:
+
+                        for (int id : selection)
+                            readLetter(id);
+
+                        Toast.makeText(
+                                TableActivity.this,
+                                getResources()
+                                        .getQuantityString(R.plurals.Mail_Actions_Read, selection.length)
+                                        .replace("$n", selection.length + ""),
+                                Toast.LENGTH_LONG
+                        ).show();
+
+                        break;
                 }
 
-            switchSelectionModeOff();
+                switchSelectionModeOff();
+
+            } else {
+
+                Toast.makeText(
+                        TableActivity.this,
+                        getString(R.string.Mail_Actions_Error),
+                        Toast.LENGTH_LONG
+                ).show();
+
+            }
+
             hideProgressBar();
-            switchOverScrollHandling(true);
+
         }
 
     }

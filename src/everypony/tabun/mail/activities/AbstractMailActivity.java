@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ public class AbstractMailActivity extends Activity {
     protected LinearLayout getList() {
         return (LinearLayout) findViewById(R.id.list);
     }
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Au.user == null)
@@ -75,8 +77,15 @@ public class AbstractMailActivity extends Activity {
 
     }
 
-    @Override protected void onRestart() {
-        super.onRestart();
+    @Override protected void onResume() {
+        super.onResume();
+
+//        MessageFactory.setListener(new MessageFactory.MessageListener() {
+//            @Override public void show(JSONObject parsed) {
+//                Toast.makeText(AbstractMailActivity.this, parsed.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+
         if (Au.user != null)
             startTalkBellService();
     }
@@ -98,6 +107,14 @@ public class AbstractMailActivity extends Activity {
     protected void init() {
         Au.i(this, "init()");
         setContentView(R.layout.main);
+
+        getList().setOnTouchListener(new View.OnTouchListener() {
+            @Override public boolean onTouch(View view, MotionEvent motionEvent) {
+                updateFiller();
+                return true;
+            }
+        });
+
     }
 
       /*========================*/
@@ -151,11 +168,14 @@ public class AbstractMailActivity extends Activity {
 
     private int current_scroll = 0;
 
-    // Кэшированные высоты.
+    // Кэшированные положения элементов по y относительно нуля их референсной панели.
     private List<Integer> heights;
     {heights = new ArrayList<>();}
 
-    protected void onScrolled(int y, int old_y) {}
+    protected void onScrolled(int y, int old_y) {
+        updateFiller();
+        current_scroll = y;
+    }
     protected int getCurrentScroll() { return current_scroll;}
 
     protected void smoothScrollTo(int index) { smoothScrollToPixel(heights.get(index));}
@@ -164,14 +184,39 @@ public class AbstractMailActivity extends Activity {
     protected void scrollTo(int index) { scrollToPixel(heights.get(index));}
     protected void scrollToPixel(int y) { findViewById(R.id.root).scrollTo(0, y);}
 
-    protected void updateHeights() {
+    /**
+     * Обновляет кэшированные высоты.
+     */
+    private void updateHeights() {
         LinearLayout list = getList();
         heights.clear();
         int h = 0;
+
         for (int i = 0; i < list.getChildCount(); i++) {
             heights.add(h);
             h += list.getChildAt(i).getHeight();
         }
+    }
+
+    public int getCurrentItem() {
+
+        LinearLayout list = getList();
+        int scroll = getCurrentScroll();
+        int count = list.getChildCount();
+        int index = 0;
+
+        do {
+            scroll -= list.getChildAt(index).getHeight();
+        }
+        // В последней итерации index не успеет уйти в ++, ибо выражение вылетит с false на scroll > 0
+        while (scroll > 0 && index++ < count);
+
+        return index;
+    }
+
+    @Override public boolean onTouchEvent(MotionEvent event) {
+        updateFiller();
+        return super.onTouchEvent(event);
     }
 
       /*=============================================================================================*/
@@ -194,7 +239,6 @@ public class AbstractMailActivity extends Activity {
     // Пользователь должен отпустить экран перед тем, как снова запускать обновление.
     // Этот параметр будет в true после триггера и до ACTION_UP.
     private void onOverScrolled(float y, boolean clamped) {
-        updateFiller();
         if (clamped) {
 
             if (y > 0 && top_overscroll_working && !top_overscroll_switching) {
@@ -238,7 +282,7 @@ public class AbstractMailActivity extends Activity {
      * Нужен для работы прокрутки даже если контент меньше экрана.
      * Вызывать при обновлениях контента в list и обновлении размеров экрана (при повороте).
      */
-    protected void updateFiller() {
+    private void updateFiller() {
         int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 10; // Оставляем пиксели для скролла.
 
         if (delta > 0) {
@@ -261,9 +305,12 @@ public class AbstractMailActivity extends Activity {
     }
 
     /**
-     * С помощью этой штуки можно полностью отключить весь хэндлинг и обработку scroll-а и overscroll-а.
+     * С помощью этой штуки можно полностью или включить отключить весь хэндлинг и обработку scroll-а и overscroll-а.
      */
     protected void switchOverScrollHandling(boolean state) {
+        updateHeights();
+        updateFiller();
+
         if (state)
             ((ScrollingView) findViewById(R.id.root)).setHandler(new ScrollingView.ScrollHandler() {
                 @Override public void onScrolled(int y, int old_y) {

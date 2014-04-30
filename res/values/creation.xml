@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string name="Mail.Creation.Title">Тема</string>
+<string name="Mail.Creation.Text">Текст</string>
+<string name="Mail.Creation.Recipients">Кому</string>
+<string name="Mail.Creation.Send">Отправить</string>
+<string name="Mail.Creation.Preview">Предпросмотр</string>
+</resources>

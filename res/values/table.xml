@@ -41,6 +41,25 @@
         <item quantity="zero">новых</item>
     </plurals>
 
+    <plurals name="Mail_Actions_Delete">
+        <item quantity="one">Удалено $n письмо.</item>
+        <item quantity="few">Удалено $n письма.</item>
+        <item quantity="many">Удалено $n писем.</item>
+        <item quantity="two">Удалено $n письма.</item>
+        <item quantity="other">Удалено $n писем.</item>
+        <item quantity="zero">Удалено $n писем.</item>
+    </plurals>
+
+    <plurals name="Mail_Actions_Read">
+        <item quantity="one">$n письмо отмечено как новое.</item>
+        <item quantity="few">$n письма отмечены как новые.</item>
+        <item quantity="many">$n писем отмечено как новые.</item>
+        <item quantity="two">$n письма отмечено как новые.</item>
+        <item quantity="other">$n писем отмечены как новые.</item>
+        <item quantity="zero">$n писем отмечено как новые.</item>
+    </plurals>
+
+    <string name="Mail.Actions.Error">Ошибка при выполнении операции над письмами.</string>
 
     <string name="Mail.Notification.Comment">Новый ответ в письме</string>
     <string name="Mail.Notification.Letter">Вам пришло письмо</string>

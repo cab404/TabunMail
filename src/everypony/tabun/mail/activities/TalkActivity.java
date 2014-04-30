@@ -151,9 +151,6 @@ public class TalkActivity extends AbstractMailActivity {
 
             getList().forceLayout();
 
-            updateHeights();
-            updateFiller();
-
         }
     }
 

@@ -2,7 +2,7 @@ package everypony.tabun.mail;
 
 import android.app.Application;
 import android.util.Log;
-import com.cab404.moonlight.util.Logger;
+import com.cab404.moonlight.util.logging.Logger;
 
 /**
  * @author cab404
@@ -13,7 +13,7 @@ public class MailApp extends Application {
         super.onCreate();
 
         // Устанавливаем логгер для вывода в Android.
-        com.cab404.moonlight.util.U.setLogger(new Logger() {
+        com.cab404.moonlight.util.logging.Log.setLogger(new Logger() {
             @Override public void error(String str) {
                 Log.w("libTabun", str);
             }
