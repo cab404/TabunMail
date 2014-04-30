@@ -172,7 +172,7 @@ public class TableActivity extends AbstractMailActivity {
         LetterLabel label = id_to_letter.get(id);
         label.is_new = false;
 
-        PartUtils.dumpIntoLetterLabel(
+        PartUtils.dumpLetterLabel(
                 getList().getChildAt(id_to_index.get(id)),
                 label
         );
@@ -252,7 +252,7 @@ public class TableActivity extends AbstractMailActivity {
             // Создаём заголовок.
             View label = inflater.inflate(R.layout.letter_label, list, false);
 
-            PartUtils.dumpIntoLetterLabel(label, letter);
+            PartUtils.dumpLetterLabel(label, letter);
 
             label.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="replacer">Пример текста</string>
     <string name="Mail.App.Name">Пони-почтовик</string>
 
@@ -58,6 +58,10 @@
         <item quantity="other">$n писем отмечены как новые.</item>
         <item quantity="zero">$n писем отмечено как новые.</item>
     </plurals>
+
+    <style name="Luna" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar" tools:ignore="NewApi">
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
 
     <string name="Mail.Actions.Error">Ошибка при выполнении операции над письмами.</string>
 

@@ -23,6 +23,11 @@
                       android:textColor="@color/Mail.Label.Primary.Color"
                       android:textSize="@dimen/Mail.Label.Primary.Size"
                       android:singleLine="true"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </LinearLayout>
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:text="@string/replacer" android:id="@+id/about"
                       android:textColor="@color/Mail.Label.Secondary.Color"

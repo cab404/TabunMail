@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.cab404.libtabun.data.Comment;
+import com.cab404.libtabun.data.Letter;
 import com.cab404.libtabun.modules.CommentNumModule;
 import com.cab404.libtabun.pages.LetterPage;
 import com.cab404.libtabun.pages.TabunPage;
@@ -112,19 +113,19 @@ public class TalkActivity extends AbstractMailActivity {
             LayoutInflater inflater = getLayoutInflater();
 
             switch (key) {
-//                case TabunPage.BLOCK_LETTER_HEADER: {
-//                    Letter letter = (Letter) obj;
-//
-//                    View label = inflater.inflate(R.layout.letter_label, getList(), false);
-//
-//                    setBarTitle(letter.title);
-//
-//                    PartUtils.dumpIntoLetterLabel(label, letter);
-//
-//                    getList().addView(label);
-//
-//                }
-//                break;
+                case TabunPage.BLOCK_LETTER_HEADER: {
+                    Letter letter = (Letter) obj;
+
+                    View label = inflater.inflate(R.layout.letter_label, getList(), false);
+
+                    setBarTitle(letter.title);
+
+//                    PartUtils.dumpLetterLabel(label, letter);
+
+                    getList().addView(label);
+
+                }
+                break;
 
                 case TabunPage.BLOCK_COMMENT: {
                     Comment comment = (Comment) obj;

@@ -62,7 +62,7 @@ public class PartUtils {
     /**
      * Загружает данные письма в частичный
      */
-    public static void dumpIntoLetterLabel(View label, LetterLabel letter) {
+    public static void dumpLetterLabel(View label, LetterLabel letter) {
         Resources res = label.getResources();
 
         // Достаём ресурсы.

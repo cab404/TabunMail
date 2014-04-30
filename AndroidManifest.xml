@@ -16,7 +16,7 @@
             android:allowBackup="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:icon="@drawable/ic_launcher"
-            android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar"
+            android:theme="@style/Luna"
             android:label="@string/Mail.App.Name"
             tools:ignore="NewApi"
             android:name=".MailApp">
@@ -73,7 +73,26 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activities.MailCreationActivity"/>
+        <activity android:name=".activities.MailCreationActivity"
+                  android:exported="true"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                >
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="tabun.everypony.ru"
+                        android:pathPattern="/talk/add/"
+                        />
+
+            </intent-filter>
+
+        </activity>
 
         <service android:name=".tasks.TalkBellService"
                  android:exported="false"

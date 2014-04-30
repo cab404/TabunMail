@@ -12,32 +12,41 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent" android:background="@color/Mail.Label.BG">
 
+        <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:id="@+id/horizontalScrollView"
+                >
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="wrap_content"
+                          android:layout_height="fill_parent" android:id="@+id/users">
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/Mail.Bar.Font.Color"
+                android:id="@+id/recipients" android:hint="@string/Mail.Creation.Recipients"
+                android:singleLine="true"/>
+
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/Mail.Bar.Font.Color"
                 android:id="@+id/editText" android:hint="@string/Mail.Creation.Title"
                 />
-        <HorizontalScrollView android:layout_width="match_parent" android:layout_height="38dp"
-                              android:id="@+id/horizontalScrollView">
-            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent"
-                          android:layout_height="fill_parent" android:id="@+id/users">
-            </LinearLayout>
-        </HorizontalScrollView>
-        <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/Mail.Bar.Font.Color"
-                android:id="@+id/recipients" android:hint="@string/Mail.Creation.Recipients"
-                />
         <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                >
+                android:visibility="gone">
+
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/toolkit"
+                    >
                 <ImageView android:layout_width="38dp" android:layout_height="38dp" android:id="@+id/editAction"
                            android:src="@drawable/ic_action_cancel"/>
                 <ImageView android:layout_width="38dp" android:layout_height="38dp" android:id="@+id/editAction2"
@@ -49,28 +58,35 @@
                 <ImageView android:layout_width="38dp" android:layout_height="38dp" android:id="@+id/editAction5"
                            android:src="@drawable/ic_action_cancel"/>
             </LinearLayout>
+
         </HorizontalScrollView>
+
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/text" android:textColor="@color/Mail.Bar.Font.Color"
                 android:textCursorDrawable="@null"
                 android:minHeight="300dp" android:gravity="left|top" android:hint="@string/Mail.Creation.Text"/>
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Mail.Creation.Send"
                     android:id="@+id/send"/>
+
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Mail.Creation.Preview"
                     android:id="@+id/preview"/>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
