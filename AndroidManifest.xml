@@ -73,6 +73,8 @@
             </intent-filter>
 
         </activity>
+
+        <!-- Создание письма -->
         <activity android:name=".activities.MailCreationActivity"
                   android:exported="true"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -94,9 +96,10 @@
 
         </activity>
 
+        <!-- Проверка писем -->
         <service android:name=".tasks.TalkBellService"
                  android:exported="false"
-                 android:process=":background"
+                 android:process=":bg"
                 />
 
     </application>

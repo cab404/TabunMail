@@ -232,43 +232,45 @@ public class AbstractMailActivity extends Activity {
     // Контролирует необходимую прокрутку в стену для обновления.
     // Вычисляется в создании в соответствии с DPI.
     private float max_counter;
-    // Счетчик "длины касания края". Столько, сколько юзер прокручивал в стену.
-    // Один на оба края. Для верка положительный, для низа отрицательный.
+    // Счетчики "длины касания края". Столько, сколько юзер прокручивал в стену.
     // Нужен для обработки overscroll-ов.
-    private float edge_counter = 0;
+    private float top_counter = 0, bottom_counter = 0;
     // Пользователь должен отпустить экран перед тем, как снова запускать обновление.
     // Этот параметр будет в true после триггера и до ACTION_UP.
     private void onOverScrolled(float y, boolean clamped) {
         if (clamped) {
 
             if (y > 0 && top_overscroll_working && !top_overscroll_switching) {
-                edge_counter = edge_counter < 0 ? 0 : edge_counter;
-                edge_counter += y;
-                setTopOverscrollBar((float) Math.sqrt(Math.abs(edge_counter) / max_counter));
+                bottom_counter = 0;
+                top_counter += y;
+                hideBottomOverscrollBar();
+                setTopOverscrollBar((float) Math.sqrt(Math.abs(top_counter) / max_counter));
             }
 
-            if (y < 0 && bottom_overscroll_working && !top_overscroll_switching) {
-                edge_counter = edge_counter > 0 ? 0 : edge_counter;
-                edge_counter += y;
-                setBottomOverscrollBar((float) Math.sqrt(Math.abs(edge_counter) / max_counter));
+            if (y < 0 && bottom_overscroll_working && !bottom_overscroll_switching) {
+                top_counter = 0;
+                bottom_counter += y;
+                hideTopOverscrollBar();
+                setBottomOverscrollBar((float) Math.sqrt(Math.abs(bottom_counter) / max_counter));
             }
 
         } else {
             // -100 указано в ScrollingView, magic number в данном случае. Активируется при ACTION_UP (отпустили экран).
-            // А нам это и нужно. Если edge counter достиг нужной отметки к этому времени, то можно отправлять эвент в
+            // А нам это и нужно. Если counter достиг нужной отметки к этому времени, то можно отправлять эвент в
             // onOverscrollTriggered.
             if (y == -100) {
 
-                if (edge_counter >= +max_counter)
+                if (top_counter >= +max_counter)
                     onOverscrollTriggered(true);
 
-                if (edge_counter <= -max_counter)
+                if (bottom_counter <= -max_counter)
                     onOverscrollTriggered(false);
             }
 
             hideTopOverscrollBar();
             hideBottomOverscrollBar();
-            edge_counter = 0;
+            top_counter = 0;
+            bottom_counter = 0;
         }
 
     }
@@ -283,7 +285,7 @@ public class AbstractMailActivity extends Activity {
      * Вызывать при обновлениях контента в list и обновлении размеров экрана (при повороте).
      */
     private void updateFiller() {
-        int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 10; // Оставляем пиксели для скролла.
+        int delta = findViewById(R.id.root).getHeight() - getList().getHeight() + 2; // Оставляем пиксели для скролла.
 
         if (delta > 0) {
             findViewById(R.id.root_filler).setLayoutParams(

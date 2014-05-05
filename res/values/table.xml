@@ -51,15 +51,16 @@
     </plurals>
 
     <plurals name="Mail_Actions_Read">
-        <item quantity="one">$n письмо отмечено как новое.</item>
-        <item quantity="few">$n письма отмечены как новые.</item>
-        <item quantity="many">$n писем отмечено как новые.</item>
-        <item quantity="two">$n письма отмечено как новые.</item>
-        <item quantity="other">$n писем отмечены как новые.</item>
-        <item quantity="zero">$n писем отмечено как новые.</item>
+        <item quantity="one">$n письмо отмечено как прочитанное.</item>
+        <item quantity="few">$n письма отмечены как прочитанные.</item>
+        <item quantity="many">$n писем отмечено как прочитанные.</item>
+        <item quantity="two">$n письма отмечено как прочитанные.</item>
+        <item quantity="other">$n писем отмечены как прочитанные.</item>
+        <item quantity="zero">$n писем отмечено как прочитанные.</item>
     </plurals>
 
-    <style name="Luna" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar" tools:ignore="NewApi">
+    <!-- Ибо задолбало проставлять везде это вручную. -->
+    <style name="Luna" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <item name="android:textCursorDrawable">@null</item>
     </style>
 

@@ -149,6 +149,7 @@ public class TableActivity extends AbstractMailActivity {
         icon.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 startActivity(new Intent(TableActivity.this, MailCreationActivity.class));
+                finish();
             }
         });
         bar.addView(icon);

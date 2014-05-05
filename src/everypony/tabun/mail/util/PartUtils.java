@@ -40,9 +40,13 @@ public class PartUtils {
 
     }
 
-    public static int dpToPx(int px, Context context) {
+    public static int dpToPx(float dp, Context context) {
         Resources resources = context.getResources();
-        return resources.getDisplayMetrics().densityDpi * px;
+        return (int) (resources.getDisplayMetrics().densityDpi * dp);
+    }
+    
+    public static int spToPx(float sp, Context context) {
+        return (int) (context.getResources().getDisplayMetrics().scaledDensity * sp);
     }
 
     public static String convertDate(Calendar calendar) {
@@ -77,6 +81,7 @@ public class PartUtils {
         //// Текст и описание
 
         title.setText(letter.title);
+
         if (letter.is_new)
             title.setTypeface(Typeface.DEFAULT_BOLD);
 

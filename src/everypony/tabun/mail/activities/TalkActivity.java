@@ -17,6 +17,7 @@ import com.cab404.moonlight.framework.ModularBlockParser;
 import everypony.tabun.mail.R;
 import everypony.tabun.mail.util.Au;
 import everypony.tabun.mail.util.PartUtils;
+import everypony.tabun.mail.util.TextEscaper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +57,6 @@ public class TalkActivity extends AbstractMailActivity {
         levels.put(comment.id, level);
 
         View label = getLayoutInflater().inflate(R.layout.comment, getList(), false);
-//                    label.setAlpha(0);
-//                    label.animate().alpha(1).setDuration(100);
 
         label.findViewById(R.id.new_mark).setVisibility(comment.is_new ? View.VISIBLE : View.INVISIBLE);
 
@@ -65,7 +64,8 @@ public class TalkActivity extends AbstractMailActivity {
         TextView view = new TextView(TalkActivity.this);
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.Mail_Label_Primary_Size));
         view.setTextColor(getResources().getColor(R.color.Mail_Label_Primary_Color));
-        view.setText(comment.text);
+        view.setText(TextEscaper.simpleEscape(comment.text, label.getContext()));
+        view.setLinksClickable(true);
         viewGroup.addView(view);
 
         ((TextView) label.findViewById(R.id.starter_nick)).setText(comment.author.login);

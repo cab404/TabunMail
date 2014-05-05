@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import com.cab404.libtabun.data.Letter;
 import com.cab404.libtabun.pages.TabunPage;
 import com.cab404.libtabun.requests.TalkBellRequest;
@@ -20,25 +19,35 @@ import everypony.tabun.mail.util.Au;
 /**
  * @author cab404
  */
-public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
+public class TalkBellChecker extends Thread {
     private final Context context;
     private AccessProfile user;
+    /* Работает ли еще поток. */
+    private boolean cancelled;
 
+    /* Время между обновлениями, в миллисекундах. */
     private final static int UPDATE_RATE = 15000;
-
 
     public TalkBellChecker(Context context, String token) {
         this.context = context.getApplicationContext();
         user = AccessProfile.parseString(token);
     }
 
-    @Override protected Void doInBackground(Void... voids) {
-        Au.i(this, "doInBackground()");
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void cancel() {
+        cancelled = true;
+    }
+
+    @Override
+    public void run() {
 
         TabunPage page = new TabunPage();
         long last_launched = 0;
 
-        while (!isCancelled()) {
+        while (!cancelled) {
             if (page.key == null) page.fetch(user);
 
             if (System.currentTimeMillis() - last_launched > UPDATE_RATE)
@@ -75,8 +84,9 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
 
                 }
 
+                /* Если у нас есть хоть что-нибудь - отправляем в обработку. */
                 if (bell.new_letters.size() > 0 || bell.responses.size() > 0)
-                    publishProgress(bell);
+                    processNotifications(bell);
 
             } else {
                 Au.e(this, "У нас проблемы с сетью...");
@@ -84,7 +94,7 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
 
         }
         Au.i(this, "Меня выключили.");
-        return null;
+
     }
 
     protected Notification.Builder notificationTemplate(Letter letter) {
@@ -112,9 +122,10 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
         return builder;
     }
 
-    @Override protected void onProgressUpdate(TalkBellRequest... values) {
-        super.onProgressUpdate(values);
-        TalkBellRequest req = values[0];
+    /**
+     * Смотрит, что пришло от сервера и выводит уведомления.
+     */
+    public void processNotifications(TalkBellRequest req) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         for (Letter letter : req.responses) {
@@ -146,5 +157,4 @@ public class TalkBellChecker extends AsyncTask<Void, TalkBellRequest, Void> {
         }
 
     }
-
 }
